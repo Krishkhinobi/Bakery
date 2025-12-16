@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bakery Inventory System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-image: url('Bakery.jpg'); /* Replace with your bakery image URL */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff; /* White text for better contrast */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    
+    /* Login Box Styling */
+    .login-container {
+      background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent dark background */
+      border-radius: 15px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border: 2px solid #f8b400;
+    }
+    
+    .login-container h1 {
+      color: #f8b400;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+    
+    .login-container input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .login-container input:focus {
+      outline: none;
+      border-color: #f8b400;
+      box-shadow: 0 0 5px rgba(248, 180, 0, 0.5);
+    }
+    
+    .login-container button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background-color: #f8b400;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .login-container button:hover {
+      background-color: #ffcc33;
+    }
+    
+    .credentials-hint {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #aaa;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    
+    .credentials-hint strong {
+      color: #f8b400;
+    }
+    
+    h1, h2 {
+      color: #f8b400; /* Warm yellow color for headings */
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    input, button, select {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #fff; /* White border for better visibility */
+      text-align: center;
+    }
+    th {
+      background-color: rgba(0, 0, 0, 0.7); /* Dark background for table headers */
+      color: #f8b400; /* Warm yellow text for table headers */
+    }
+    .btn {
+      background-color: #e29578; /* Soft bakery-themed color */
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+      padding: 10px 20px;
+    }
+    .btn:hover {
+      background-color: #d17a66; /* Slightly darker on hover */
+    }
+    
+    /* Remove button specific styling */
+    .remove-btn {
+      background-color: #dc3545; /* Red color for remove buttons */
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .remove-btn:hover {
+      background-color: #c82333; /* Darker red on hover */
+    }
+    
+    .login-section, .nav-bar { text-align: center; }
+    .nav-bar button { margin: 5px; }
+    .hidden { display: none; }
+
+    /* Positioning the Logout Button */
+    .logout-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background-color: #f8b400; /* Yellow color for logout button */
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .logout-btn:hover {
+      background-color: #d17a66; /* Darker shade when hovered */
+    }
+
+    /* Home Section Styling */
+    .home-content {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .category, .quick-actions {
+      width: 45%;
+      padding: 20px;
+      border: 1px solid #ddd;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background for readability */
+      border-radius: 10px;
+    }
+    .category ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .category ul li {
+      margin: 8px 0;
+      font-weight: bold;
+      color: #f8b400; /* Warm yellow text for list items */
+    }
+    .quick-actions button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    /* Main page container */
+    #mainPage {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .home-content {
+        flex-direction: column;
+      }
+      .category, .quick-actions {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<!-- Login Page -->
+<div id="loginPage" class="login-section">
+  <div class="login-container">
+    <h1>🍞 Bakery Inventory System</h1>
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button class="btn" onclick="login()">Login</button>
+    
+    <div class="credentials-hint">
+      <p><strong>Default Credentials:</strong></p>
+      <p>Username: <strong>admin</strong></p>
+      <p>Password: <strong>admin1</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- Main Page -->
+<div id="mainPage" class="hidden">
+  <h1>🍞 Bakery Inventory & Transaction System</h1>
+
+  <!-- Logout Button positioned at the right upper side -->
+  <button class="btn logout-btn" onclick="logout()">Logout</button>
+
+  <!-- Home Section -->
+  <div id="home" class="section">
+    <h2>Welcome to the Bakery Inventory System</h2>
+    <div class="home-content">
+      <div class="category">
+        <h3>Product Categories</h3>
+        <ul>
+          <li>Breads</li>
+          <li>Cakes</li>
+          <li>Pastries</li>
+          <li>Cookies</li>
+        </ul>
+      </div>
+      <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="btn" onclick="showSection('home')">Home</button>
+        <button class="btn" onclick="showSection('products')">Manage Products</button>
+        <button class="btn" onclick="showSection('stocks')">Manage Stocks</button>
+        <button class="btn" onclick="showSection('sales')">View Sales</button>
+        <button class="btn" onclick="showSection('users')">Manage Users</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Section -->
+  <div id="products" class="section hidden">
+    <button class="btn" onclick="showSection('home')">Back to Home</button>
+    <h2>Products List</h2>
+    <input type="text" id="prodCode" placeholder="Code" />
+    <input type="text" id="prodCategory" placeholder="Category" />
+    <input type="text" id="prodName" placeholder="Product" />
+    <input type="number" id="prodPrice" placeholder="Price" />
+    <select id="prodStatus">
+      <option value="Available">Available</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+    <button class="btn" onclick="addProduct()">Add Product</button>
+    <table>
+      <thead>
+        <tr><th>Code</th><th>Category</th><th>Product</th><th>Price</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody id="productsTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Stocks Section -->
+  <div id="stocks" class="section hidden">
+    <button class="btn" onclick="showSection('home')">Back to Home</button>
+    <h2>Stock List</h2>
+    <input type="text" id="stockProduct" placeholder="Product" />
+    <input type="number" id="stockQty" placeholder="Quantity" />
+    <input type="date" id="stockExpiry" placeholder="Expiry" />
+    <button class="btn" onclick="addStock()">Add Stock</button>
+    <table>
+      <thead>
+        <tr><th>Date Added</th><th>Product</th><th>Quantity</th><th>Expiry</th><th>Action</th></tr>
+      </thead>
+      <tbody id="stocksTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Sales Section -->
+  <div id="sales" class="section hidden">
+    <button class="btn" onclick="showSection('home')">Back to Home</button>
+    <h2>Sales</h2>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Receipt No.</th><th>Items</th><th>Total Amount</th><th>Action</th></tr>
+      </thead>
+      <tbody id="salesTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Users Section -->
+  <div id="users" class="section hidden">
+    <button class="btn" onclick="showSection('home')">Back to Home</button>
+    <h2>Users</h2>
+    <input type="text" id="userName" placeholder="Name" />
+    <input type="text" id="userUsername" placeholder="Username" />
+    <select id="userType">
+      <option value="Admin">Admin</option>
+      <option value="Staff">Staff</option>
+    </select>
+    <button class="btn" onclick="addUser()">Add User</button>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Username</th><th>Type</th><th>Action</th></tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Updated credentials as requested
+  const adminCredentials = { username: "admin", password: "admin1" };
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  let stocks = JSON.parse(localStorage.getItem("stocks")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+  // Auto-fill credentials for demo (optional)
+  window.onload = function() {
+    document.getElementById("username").value = "admin";
+    document.getElementById("password").value = "admin1";
+    
+    // Add sample product if none exists (as shown in the image)
+    if (products.length === 0) {
+      products.push({
+        code: "12345",
+        category: "bread",
+        name: "pandesal",
+        price: 5.00,
+        status: "Available"
+      });
+      saveAll();
+    }
+  };
+
+  function saveAll() {
+    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem("stocks", JSON.stringify(stocks));
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("sales", JSON.stringify(sales));
+  }
+
+  function login() {
+    const u = document.getElementById("username").value;
+    const p = document.getElementById("password").value;
+    if (u === adminCredentials.username && p === adminCredentials.password) {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("mainPage").style.display = "block";
+      renderAll();
+    } else {
+      alert("Invalid credentials. Please use username: admin and password: admin1");
+    }
+  }
+
+  // Allow Enter key to trigger login
+  document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && document.getElementById("loginPage").style.display !== "none") {
+      login();
+    }
+  });
+
+  function logout() {
+    document.getElementById("loginPage").style.display = "block";
+    document.getElementById("mainPage").style.display = "none";
+    // Clear input fields on logout
+    document.getElementById("username").value = "admin";
+    document.getElementById("password").value = "admin1";
+  }
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function renderAll() {
+    renderProducts();
+    renderStocks();
+    renderUsers();
+    renderSales();
+  }
+
+  // PRODUCTS FUNCTIONS
+  function addProduct() {
+    const code = document.getElementById("prodCode").value;
+    const category = document.getElementById("prodCategory").value;
+    const name = document.getElementById("prodName").value;
+    const price = parseFloat(document.getElementById("prodPrice").value);
+    const status = document.getElementById("prodStatus").value;
+    
+    if (!code || !category || !name || !price) {
+      alert("Please fill in all product fields");
+      return;
+    }
+    
+    products.push({
+      code: code,
+      category: category,
+      name: name,
+      price: price,
+      status: status
+    });
+    saveAll();
+    renderProducts();
+    
+    // Clear form fields
+    document.getElementById("prodCode").value = "";
+    document.getElementById("prodCategory").value = "";
+    document.getElementById("prodName").value = "";
+    document.getElementById("prodPrice").value = "";
+  }
+
+  function removeProduct(index) {
+    if (confirm("Are you sure you want to remove this product?")) {
+      products.splice(index, 1);
+      saveAll();
+      renderProducts();
+    }
+  }
+
+  function renderProducts() {
+    const productsTable = document.getElementById("productsTable");
+    productsTable.innerHTML = products.map((p, index) => `
+      <tr>
+        <td>${p.code}</td>
+        <td>${p.category}</td>
+        <td>${p.name}</td>
+        <td>$${p.price.toFixed(2)}</td>
+        <td>${p.status}</td>
+        <td>
+          <button class="remove-btn" onclick="removeProduct(${index})" title="Remove this product">
+            Remove
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  // STOCKS FUNCTIONS
+  function addStock() {
+    const product = document.getElementById("stockProduct").value;
+    const quantity = parseInt(document.getElementById("stockQty").value);
+    const expiry = document.getElementById("stockExpiry").value;
+    
+    if (!product || !quantity || !expiry) {
+      alert("Please fill in all stock fields");
+      return;
+    }
+    
+    stocks.push({
+      date: new Date().toLocaleDateString(),
+      product: product,
+      quantity: quantity,
+      expiry: expiry
+    });
+    saveAll();
+    renderStocks();
+    
+    // Clear form fields
+    document.getElementById("stockProduct").value = "";
+    document.getElementById("stockQty").value = "";
+    document.getElementById("stockExpiry").value = "";
+  }
+
+  function removeStock(index) {
+    if (confirm("Are you sure you want to remove this stock entry?")) {
+      stocks.splice(index, 1);
+      saveAll();
+      renderStocks();
+    }
+  }
+
+  function renderStocks() {
+    const stocksTable = document.getElementById("stocksTable");
+    stocksTable.innerHTML = stocks.map((s, index) => `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.product}</td>
+        <td>${s.quantity}</td>
+        <td>${s.expiry}</td>
+        <td>
+          <button class="remove-btn" onclick="removeStock(${index})" title="Remove this stock entry">
+            Remove
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  // USERS FUNCTIONS
+  function addUser() {
+    const name = document.getElementById("userName").value;
+    const username = document.getElementById("userUsername").value;
+    const type = document.getElementById("userType").value;
+    
+    if (!name || !username) {
+      alert("Please fill in all user fields");
+      return;
+    }
+    
+    // Check if username already exists
+    if (users.some(user => user.username === username)) {
+      alert("Username already exists. Please choose a different username.");
+      return;
+    }
+    
+    users.push({
+      name: name,
+      username: username,
+      type: type
+    });
+    saveAll();
+    renderUsers();
+    
+    // Clear form fields
+    document.getElementById("userName").value = "";
+    document.getElementById("userUsername").value = "";
+  }
+
+  function removeUser(index) {
+    const username = users[index].username;
+    
+    // Prevent removing the admin account
+    if (username === "admin") {
+      alert("Cannot remove the admin account!");
+      return;
+    }
+    
+    if (confirm(`Are you sure you want to remove user: ${username}?`)) {
+      users.splice(index, 1);
+      saveAll();
+      renderUsers();
+    }
+  }
+
+  function renderUsers() {
+    const usersTable = document.getElementById("usersTable");
+    usersTable.innerHTML = users.map((u, index) => `
+      <tr>
+        <td>${u.name}</td>
+        <td>${u.username}</td>
+        <td>${u.type}</td>
+        <td>
+          <button class="remove-btn" onclick="removeUser(${index})" title="Remove this user" ${u.username === "admin" ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
+            Remove
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  // SALES FUNCTIONS
+  function removeSale(index) {
+    if (confirm("Are you sure you want to remove this sale record?")) {
+      sales.splice(index, 1);
+      saveAll();
+      renderSales();
+    }
+x
+    
+    salesTable.innerHTML = sales.map((s, index) => `
+      <tr>
+        <td>${s.date}</td>
+        <td>#${index + 1001}</td>
+        <td>${s.items}</td>
+        <td>$${s.total.toFixed(2)}</td>
+        <td>
+          <button class="remove-btn" onclick="removeSale(${index})" title="Remove this sale record">
+            Remove
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+</script>
+
+</body>
+</html>
